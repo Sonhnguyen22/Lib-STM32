@@ -174,14 +174,6 @@ uint8_t I2C_ReadByte(volatile I2C_TypeDef* I2Cx, uint8_t devAddr, uint8_t regAdd
 
 }
 
-
-
-
-
-
-
-
-
 //
 uint8_t I2C_ReadBytes(volatile I2C_TypeDef* I2Cx, uint8_t devAddr, uint8_t regAddr, uint8_t* pData, uint16_t len) {
   // 1. Gui Start Condition
