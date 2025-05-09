@@ -21,8 +21,8 @@ void MPU6050_Init(I2C_TypeDef *I2Cx, const MPU6050_Config* config) {
   // Cau hinh mac dinh
   static const MPU6050_Config default_config = {
     .PowerMgmt     = { .ClockSource = 1, .SleepMode = 0, .TemperatureDIS = 0 },
-    .GyroConfig    = { .GyroRange = 1 },   // ±500°/s
-    .AccelConfig   = { .AccelRange = 1 }, // ±4g
+    .GyroConfig    = { .GyroRange = 1 },   // Â±500Â°/s
+    .AccelConfig   = { .AccelRange = 1 }, // Â±4g
     .DLPF_Config   = { .DLPF_Config = 3 }, // DLPF 44Hz
     .SampleRateDiv = { .SampleRateDiv = 7 }, // Sample Rate = 1kHz
     .InterruptEN   = { .DataReadyInt = 1 }
@@ -59,23 +59,16 @@ void MPU6050_Init(I2C_TypeDef *I2Cx, const MPU6050_Config* config) {
 }
 
 //
-
-
-
-
 void MPU6050_ReadAcc(volatile I2C_TypeDef* I2Cx, uint8_t ResAddr) {
   I2C_ReadBytes(I2Cx,MPU6050_Addr,RegAcc_X,MPU6050_D.Raw,14);
 
-	MPU6050_D.ATG.AccX = ((float)((int16_t)((MPU6050_D.Raw[0] << 8) | MPU6050_D.Raw[1])))*MPU6050_AccelScale;
+  MPU6050_D.ATG.AccX = ((float)((int16_t)((MPU6050_D.Raw[0] << 8) | MPU6050_D.Raw[1])))*MPU6050_AccelScale;
   MPU6050_D.ATG.AccY = ((float)((int16_t)((MPU6050_D.Raw[2] << 8) | MPU6050_D.Raw[3])))*MPU6050_AccelScale;
   MPU6050_D.ATG.AccZ = ((float)((int16_t)((MPU6050_D.Raw[4] << 8) | MPU6050_D.Raw[5])))*MPU6050_AccelScale;
   MPU6050_D.ATG.Temp = ((float)((int16_t)((MPU6050_D.Raw[6] << 8) | MPU6050_D.Raw[7])));
   MPU6050_D.ATG.GyrX = ((float)((int16_t)((MPU6050_D.Raw[8] << 8) | MPU6050_D.Raw[9])))*MPU6050_GyroScale;
   MPU6050_D.ATG.GyrY = ((float)((int16_t)((MPU6050_D.Raw[10] << 8) | MPU6050_D.Raw[11])))*MPU6050_GyroScale;
   MPU6050_D.ATG.GyrZ = ((float)((int16_t)((MPU6050_D.Raw[12] << 8) | MPU6050_D.Raw[13])))*MPU6050_GyroScale;
-
-  
-
 }
 //
 float MPU6050_ReadAgleX(){
@@ -91,18 +84,11 @@ float MPU6050_ReadAgleY(){
 	float x = MPU6050_D.ATG.AccX * MPU6050_D.ATG.AccX;
   float y = MPU6050_D.ATG.AccY * MPU6050_D.ATG.AccY;
   float z = MPU6050_D.ATG.AccZ * MPU6050_D.ATG.AccZ;
-  
-
   MPU6050_D.Angle.roll  = atan2f(MPU6050_D.ATG.AccY, sqrtf(x + z)) * 180.0f / M_PI;
   return MPU6050_D.Angle.roll;
 }
 
-
-
 //===================================================
-
-
-
 
 void Kalman_Init(KalmanFilter1D *kf, float init_value, float init_P, float Q, float R) {
     kf->x = init_value;
@@ -181,7 +167,7 @@ float Kalman_Update(KalmanFilter1D *kf, float z) {
 //// Bien trang thai
 //typedef struct {
 //  float velocity[3];       // Van toc 3 truc (m/s)
-//  float gravity[3];        // Vector trong luc (m/s²)
+//  float gravity[3];        // Vector trong luc (m/sÂ²)
 //  Quaternion orientation;  // Huong cam bien
 //  KalmanFilter kf[3];      // Bo loc Kalman cho 3 truc
 //} MPU6050_State;
@@ -246,7 +232,7 @@ float Kalman_Update(KalmanFilter1D *kf, float z) {
 //// Ham chinh tinh van toc
 //void MPU6050_CalculateVelocity(float dt) {
 ////  // Doc du lieu tu cam bien (gia su do cu)
-////  float acc_x = RMPU6050_A.Acc_x * 9.81f; // Chuyen tu g sang m/s²
+////  float acc_x = RMPU6050_A.Acc_x * 9.81f; // Chuyen tu g sang m/sÂ²
 ////  float acc_y = RMPU6050_A.Acc_y * 9.81f;
 ////  float acc_z = RMPU6050_A.Acc_z * 9.81f;
 ////  
